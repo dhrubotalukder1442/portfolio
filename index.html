@@ -318,6 +318,45 @@ footer{
   flex-wrap:wrap;gap:1rem;
 }
 
+/* tech canvas bg */
+#hero-canvas{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;opacity:0.35;
+}
+
+/* rotating title */
+.hero-rotating-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(0.65rem,1.5vw,0.8rem);
+  color:var(--green);
+  letter-spacing:0.15em;
+  margin-bottom:1.25rem;
+  display:flex;align-items:center;gap:0.75rem;
+  min-height:1.4em;
+}
+.hero-rotating-title::before{content:'';width:30px;height:1px;background:var(--green);flex-shrink:0}
+.rotating-text{
+  display:inline-block;
+  overflow:hidden;
+  position:relative;
+}
+.rotating-text span{
+  display:block;
+  animation:rotateTitle 6s steps(1) infinite;
+}
+@keyframes rotateTitle{
+  0%,30%{opacity:1;transform:translateY(0)}
+  33%{opacity:0;transform:translateY(-8px)}
+  34%,63%{opacity:0;transform:translateY(8px)}
+  35%,63%{opacity:1;transform:translateY(0)}
+  66%{opacity:0;transform:translateY(-8px)}
+  67%,96%{opacity:0;transform:translateY(8px)}
+  68%,100%{opacity:1;transform:translateY(0)}
+}
+
+/* ensure hero children above canvas */
+.hero > *:not(#hero-canvas){position:relative;z-index:1}
+
 /* loading skeleton pulse */
 @keyframes shimmer{0%,100%{opacity:0.3}50%{opacity:0.7}}
 .skeleton{animation:shimmer 1.5s ease-in-out infinite;background:var(--surface);border-radius:2px}
@@ -357,6 +396,7 @@ footer{
 
 <!-- HERO -->
 <div class="hero" id="about">
+  <canvas id="hero-canvas"></canvas>
   <div class="hero-bg-text">DHRUBO</div>
 
   <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem">
@@ -367,7 +407,9 @@ footer{
     </div>
   </div>
 
-  <div class="hero-eyebrow">software engineer & business analyst</div>
+  <div class="hero-rotating-title">
+    <div class="rotating-text" id="rotating-title">software engineer & business analyst</div>
+  </div>
 
   <div class="hero-name">
     Dhrubo<br>
@@ -646,6 +688,122 @@ var obs=new IntersectionObserver(function(entries){
 },{threshold:0.3});
 var analyticsEl=document.getElementById('analytics');
 if(analyticsEl)obs.observe(analyticsEl);
+
+// ── ROTATING TITLES ──────────────────────────────
+var titles = [
+  'software engineer & business analyst',
+  'python · sql · tableau · laravel',
+  'building ideas into real products'
+];
+var ti = 0;
+var rotEl = document.getElementById('rotating-title');
+setInterval(function(){
+  rotEl.style.opacity = '0';
+  rotEl.style.transform = 'translateY(-8px)';
+  rotEl.style.transition = 'opacity 0.3s,transform 0.3s';
+  setTimeout(function(){
+    ti = (ti + 1) % titles.length;
+    rotEl.textContent = titles[ti];
+    rotEl.style.transform = 'translateY(8px)';
+    rotEl.style.transition = 'none';
+    setTimeout(function(){
+      rotEl.style.opacity = '1';
+      rotEl.style.transform = 'translateY(0)';
+      rotEl.style.transition = 'opacity 0.35s,transform 0.35s';
+    }, 30);
+  }, 320);
+}, 3000);
+
+// ── TECH CANVAS BACKGROUND ───────────────────────
+(function(){
+  var canvas = document.getElementById('hero-canvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W, H, nodes = [], animId;
+
+  function resize(){
+    var hero = document.getElementById('about');
+    W = canvas.width = hero.offsetWidth;
+    H = canvas.height = hero.offsetHeight;
+  }
+
+  function Node(){
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.r = Math.random() * 1.5 + 0.5;
+    // random type: dot, bracket, bit
+    this.type = Math.floor(Math.random() * 3);
+    this.label = ['01','{}','</>','[ ]','//','()','&&','||'][Math.floor(Math.random()*8)];
+  }
+
+  function initNodes(n){
+    nodes = [];
+    for(var i=0;i<n;i++) nodes.push(new Node());
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    var maxDist = 140;
+
+    // draw connections
+    for(var i=0;i<nodes.length;i++){
+      for(var j=i+1;j<nodes.length;j++){
+        var dx = nodes[i].x - nodes[j].x;
+        var dy = nodes[i].y - nodes[j].y;
+        var d = Math.sqrt(dx*dx+dy*dy);
+        if(d < maxDist){
+          var alpha = (1 - d/maxDist) * 0.12;
+          ctx.strokeStyle = 'rgba(0,255,136,'+alpha+')';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // draw nodes
+    for(var i=0;i<nodes.length;i++){
+      var n = nodes[i];
+      if(n.type === 0){
+        // glowing dot
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(0,255,136,0.5)';
+        ctx.fill();
+      } else if(n.type === 1){
+        // code label
+        ctx.font = '9px JetBrains Mono, monospace';
+        ctx.fillStyle = 'rgba(77,159,255,0.25)';
+        ctx.fillText(n.label, n.x, n.y);
+      } else {
+        // small square pixel
+        ctx.fillStyle = 'rgba(255,179,71,0.15)';
+        ctx.fillRect(n.x, n.y, 3, 3);
+      }
+
+      // move
+      n.x += n.vx;
+      n.y += n.vy;
+      if(n.x < 0 || n.x > W) n.vx *= -1;
+      if(n.y < 0 || n.y > H) n.vy *= -1;
+    }
+
+    animId = requestAnimationFrame(draw);
+  }
+
+  resize();
+  initNodes(65);
+  draw();
+  window.addEventListener('resize', function(){
+    cancelAnimationFrame(animId);
+    resize();
+    draw();
+  });
+})();
 
 loadGH();
 </script>
