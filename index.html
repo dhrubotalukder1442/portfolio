@@ -32,7 +32,7 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-he
 .cursor{width:8px;height:8px;background:var(--green);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:difference}
 .cursor-ring{width:32px;height:32px;border:1px solid rgba(0,255,136,0.35);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;mix-blend-mode:difference}
 
-/* BG canvas */
+/* BG canvas (floating code + grid) */
 #bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
 
 /* grain overlay */
@@ -114,123 +114,21 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:1.25re
 .sec-num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.12em}
 .sec-title{font-size:clamp(1.4rem,2.5vw,2.2rem);font-weight:800;letter-spacing:-0.03em}
 
-/* ══════════════════════════════════════
-   NEW SKILLS DESIGN
-══════════════════════════════════════ */
-.skills-source-note{
-  font-family:'JetBrains Mono',monospace;font-size:0.62rem;
-  color:var(--muted);margin-bottom:2rem;
-  display:flex;align-items:center;gap:0.6rem;
-}
-.skills-source-note .pulse-dot{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--green);box-shadow:0 0 8px var(--green);
-  animation:blink 2s infinite;flex-shrink:0;
-}
+/* skills */
+.skills-source-note{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--muted);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem}
 .skills-source-note span{color:var(--green)}
-
-/* skill grid — 3 cols */
-.skill-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  background:var(--border);
-  border:0.5px solid var(--border);
-  border-radius:6px;
-  overflow:hidden;
-  margin-bottom:1.5rem;
-}
-
-.skill-tile{
-  background:rgba(8,8,22,0.95);
-  padding:1.4rem 1.25rem;
-  display:flex;flex-direction:column;gap:0.65rem;
-  position:relative;overflow:hidden;
-  transition:background 0.25s;
-}
-.skill-tile:hover{ background:rgba(14,14,30,0.98); }
-
-/* glow accent top-left */
-.skill-tile::before{
-  content:'';
-  position:absolute;top:0;left:0;
-  width:100%;height:2px;
-  background:var(--tile-color, var(--green));
-  opacity:0.7;
-}
-
-.skill-tile-top{
-  display:flex;align-items:center;justify-content:space-between;
-}
-.skill-tile-name{
-  font-size:0.88rem;font-weight:700;
-  display:flex;align-items:center;gap:0.55rem;
-}
-.skill-dot{
-  width:9px;height:9px;border-radius:50%;flex-shrink:0;
-  box-shadow:0 0 10px var(--tile-color, var(--green));
-  background:var(--tile-color, var(--green));
-}
-.skill-tile-pct{
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.7rem;font-weight:700;
-  color:var(--tile-color, var(--green));
-  opacity:0.85;
-}
-
-/* thin progress track */
-.skill-track{
-  height:2px;
-  background:rgba(255,255,255,0.06);
-  border-radius:2px;overflow:hidden;
-}
-.skill-fill{
-  height:100%;border-radius:2px;
-  width:0;
-  background:var(--tile-color, var(--green));
-  transition:width 1.3s cubic-bezier(.16,1,.3,1);
-  box-shadow:0 0 8px var(--tile-color, var(--green));
-}
-
-.skill-tile-foot{
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.58rem;color:var(--muted);
-  display:flex;align-items:center;gap:0.4rem;
-}
-.skill-tile-foot::before{
-  content:'';width:12px;height:1px;
-  background:var(--border-hover);display:inline-block;
-}
-
-/* loading skeleton */
-.skill-skeleton{
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.7rem;color:var(--muted);
-  padding:2rem 0;
-  display:flex;align-items:center;gap:0.75rem;
-}
-.sk-spinner{
-  width:14px;height:14px;border-radius:50%;
-  border:1.5px solid var(--muted2);
-  border-top-color:var(--green);
-  animation:spin 0.9s linear infinite;
-  flex-shrink:0;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* manual skills */
-.manual-skills-wrap{
-  background:rgba(8,8,22,0.92);
-  border:0.5px solid var(--border);
-  border-radius:6px;padding:1.5rem;
-  backdrop-filter:blur(8px);
-}
-.manual-skills-title{
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.58rem;color:var(--muted);
-  letter-spacing:0.12em;margin-bottom:1.1rem;
-  padding-bottom:0.75rem;border-bottom:0.5px solid var(--border);
-}
+.gh-skills-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.skill-lang-card{background:rgba(8,8,22,0.92);border:0.5px solid var(--border);border-radius:4px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;backdrop-filter:blur(8px);transition:border-color 0.2s}
+.skill-lang-card:hover{border-color:var(--border-hover)}
+.lang-color-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.lang-info{flex:1}
+.lang-name{font-size:0.88rem;font-weight:700;margin-bottom:0.35rem}
+.lang-bar-wrap{height:3px;background:var(--muted2);border-radius:2px;overflow:hidden;margin-bottom:0.3rem}
+.lang-bar{height:100%;border-radius:2px;width:0;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.lang-meta{display:flex;justify-content:space-between}
+.lang-repos,.lang-pct{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--muted)}
+.manual-skills-wrap{background:rgba(8,8,22,0.92);border:0.5px solid var(--border);border-radius:4px;padding:1.25rem;backdrop-filter:blur(8px)}
+.manual-skills-title{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:0.12em;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:0.5px solid var(--border)}
 .tags{display:flex;flex-wrap:wrap;gap:0.45rem}
 .tag{font-family:'JetBrains Mono',monospace;font-size:0.65rem;padding:0.35rem 0.75rem;border-radius:2px;letter-spacing:0.03em;transition:transform 0.2s}
 .tag:hover{transform:translateY(-2px)}
@@ -296,15 +194,12 @@ footer{border-top:0.5px solid var(--border);padding:1.75rem 3rem;display:flex;ju
   .hero-inner{grid-template-columns:1fr;gap:2.5rem}
   .stats-bar{grid-template-columns:1fr 1fr}
   .section{padding:4rem 1.5rem}
-  .skill-grid{grid-template-columns:1fr 1fr}
+  .gh-skills-wrap{grid-template-columns:1fr}
   .analytics-wrap{grid-template-columns:1fr}
   footer{padding:1.5rem}
   body{cursor:auto}
   .cursor,.cursor-ring{display:none}
   .hero-role-wrap{min-width:unset}
-}
-@media(max-width:560px){
-  .skill-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -329,25 +224,31 @@ footer{border-top:0.5px solid var(--border);padding:1.75rem 3rem;display:flex;ju
 <section class="hero" id="hero">
   <div class="hero-inner">
     <div class="hero-left">
+      <!-- typewriter role badge -->
       <div class="hero-role-wrap">
         <span class="role-text" id="roleText"></span><span class="cursor-blink"></span>
       </div>
+
       <h1 class="hero-name">Dhrubo<br><span class="line2">Talukder</span></h1>
+
       <div class="hero-bio">
         <p><strong>Passionate engineer</strong> from Dhaka, building at the intersection of code and data. I craft web applications with clean architecture and turn raw data into <strong>meaningful business insights</strong>. Currently pursuing CSE at IUBAT while working full-time as a Software Engineer at <strong>Source Expert</strong>.</p>
       </div>
+
       <div class="hero-pills">
         <span class="pill pill-loc">📍 Uttara, Dhaka</span>
         <span class="pill pill-edu">🎓 IUBAT — CSE</span>
         <span class="pill pill-role">💼 Source Expert</span>
         <span class="pill pill-role">🪖 BNCC Cadet</span>
       </div>
+
       <div class="hero-cta">
         <a class="btn btn-primary" href="mailto:dhrubot1442@gmail.com">get in touch ↗</a>
         <a class="btn btn-ghost" href="https://github.com/dhrubotalukder1442" target="_blank">github</a>
         <a class="btn btn-ghost" href="http://www.linkedin.com/in/dhrubo-talukder-02785621b" target="_blank">linkedin</a>
       </div>
     </div>
+
     <div class="hero-right">
       <div class="photo-card">
         <div id="avatar-wrap"><div class="photo-placeholder">DT</div></div>
@@ -369,15 +270,9 @@ footer{border-top:0.5px solid var(--border);padding:1.75rem 3rem;display:flex;ju
 
 <div class="section" id="skills">
   <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">Skills</h2></div>
-  <div class="skills-source-note">
-    <div class="pulse-dot"></div>
-    live-synced from github repos · languages &amp; dependencies auto-detected
-  </div>
+  <div class="skills-source-note"><span>⟳</span> coding skills auto-detected from github repos · updates every time you push new code</div>
   <div id="gh-skills-container">
-    <div class="skill-skeleton">
-      <div class="sk-spinner"></div>
-      deep scanning repos for languages &amp; dependencies...
-    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted);padding:1rem 0">scanning github repos for languages...</div>
   </div>
   <div style="margin-top:1.5rem">
     <div class="manual-skills-wrap">
@@ -488,7 +383,7 @@ function typeRole() {
     charIdx++;
     if (charIdx === current.length) {
       deleting = true;
-      setTimeout(typeRole, 3000);
+      setTimeout(typeRole, 3000); // pause 3s before deleting
       return;
     }
     setTimeout(typeRole, 75);
@@ -507,7 +402,7 @@ function typeRole() {
 typeRole();
 
 // ══════════════════════════════════════════
-// 2. BACKGROUND CANVAS
+// 2. BACKGROUND CANVAS — floating code + grid
 // ══════════════════════════════════════════
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
@@ -516,6 +411,7 @@ function resize() { canvas.width = window.innerWidth; canvas.height = window.inn
 resize();
 window.addEventListener('resize', resize);
 
+// grid dots
 function drawGrid() {
   const spacing = 40;
   ctx.fillStyle = 'rgba(255,255,255,0.04)';
@@ -528,6 +424,7 @@ function drawGrid() {
   }
 }
 
+// floating code snippets
 const snippets = [
   'const data = fetch(api);','SELECT * FROM users;','def analyze(df):',
   'git commit -m "feat"','import pandas as pd','npm run build',
@@ -575,6 +472,7 @@ function spawnParticle() {
   };
 }
 
+// seed particles spread across screen
 for (let i = 0; i < 32; i++) {
   const p = spawnParticle();
   p.x = Math.random() * window.innerWidth;
@@ -584,6 +482,7 @@ for (let i = 0; i < 32; i++) {
   particles.push(p);
 }
 
+// occasional "scan line" effect
 let scanY = 0, scanAlpha = 0, scanActive = false;
 function triggerScan() {
   scanY = 0; scanAlpha = 0.04; scanActive = true;
@@ -593,13 +492,19 @@ setTimeout(triggerScan, 3000);
 
 function animateBG() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // draw dot grid
   drawGrid();
+
+  // scan line
   if (scanActive) {
     ctx.fillStyle = 'rgba(0,255,136,' + scanAlpha + ')';
     ctx.fillRect(0, scanY, canvas.width, 2);
     scanY += 3;
     if (scanY > canvas.height) { scanActive = false; }
   }
+
+  // floating code
   for (let i = 0; i < particles.length; i++) {
     const p = particles[i];
     p.x += p.vx; p.y += p.vy; p.life++;
@@ -613,6 +518,7 @@ function animateBG() {
     ctx.fillText(p.text, p.x, p.y);
     ctx.restore();
   }
+
   requestAnimationFrame(animateBG);
 }
 animateBG();
@@ -631,22 +537,13 @@ document.querySelectorAll('a,button').forEach(function (el) {
 });
 
 // ══════════════════════════════════════════
-// 4. GITHUB API — repos + language + deps
+// 4. GITHUB API — repos + language scan
 // ══════════════════════════════════════════
 const GH = 'dhrubotalukder1442';
 
-// ⚠️ নতুন token বানিয়ে এখানে বসাও
-// GitHub → Settings → Developer Settings → Personal Access Tokens (classic)
-// Scope: শুধু "public_repo" tick করো
-const GITHUB_TOKEN = 'YOUR_TOKEN_HERE';
-
-const GH_HEADERS = GITHUB_TOKEN && GITHUB_TOKEN !== 'YOUR_TOKEN_HERE'
-  ? { 'Authorization': 'token ' + GITHUB_TOKEN }
-  : {};
-
 async function loadGH() {
   try {
-    const res = await fetch('https://api.github.com/users/' + GH, { headers: GH_HEADERS });
+    const res = await fetch('https://api.github.com/users/' + GH);
     const user = await res.json();
     document.getElementById('stat-repos').textContent = user.public_repos ?? '—';
     document.getElementById('stat-since').textContent = user.created_at ? new Date(user.created_at).getFullYear() : '—';
@@ -658,21 +555,24 @@ async function loadGH() {
 
 async function loadReposAndSkills() {
   try {
-    const res = await fetch('https://api.github.com/users/' + GH + '/repos?per_page=100&sort=updated', { headers: GH_HEADERS });
+    const res = await fetch('https://api.github.com/users/' + GH + '/repos?per_page=100&sort=updated');
     const repos = await res.json();
     if (!Array.isArray(repos)) return;
 
+    // --- language count from primary language ---
     const langCount = {};
+    let totalLang = 0;
     repos.forEach(function(r) {
-      if (r.language) { langCount[r.language] = (langCount[r.language] || 0) + 1; }
+      if (r.language) { langCount[r.language] = (langCount[r.language] || 0) + 1; totalLang++; }
     });
 
     document.getElementById('stat-commits').textContent = repos.length;
 
+    // --- deep scan: fetch package.json / composer.json / requirements.txt from each repo ---
     document.getElementById('gh-skills-container').innerHTML =
-      '<div class="skill-skeleton"><div class="sk-spinner"></div>deep scanning dependencies across all repos...</div>';
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:0.7rem;color:var(--muted);padding:1rem 0">deep scanning dependencies across all repos...</div>';
 
-    const depCount = {};
+    const depCount = {}; // { mongodb: 3, express: 5, ... }
 
     const scanPromises = repos.map(async function(r) {
       const files = [
@@ -682,7 +582,7 @@ async function loadReposAndSkills() {
       ];
       for (const f of files) {
         try {
-          const fr = await fetch(f.url, { headers: GH_HEADERS });
+          const fr = await fetch(f.url);
           if (!fr.ok) continue;
           const fd = await fr.json();
           if (!fd.content) continue;
@@ -692,7 +592,7 @@ async function loadReposAndSkills() {
             const pkg = JSON.parse(raw);
             const allDeps = Object.assign({}, pkg.dependencies || {}, pkg.devDependencies || {});
             Object.keys(allDeps).forEach(function(dep) {
-              const clean = dep.replace(/^@[^/]+\//, '');
+              const clean = dep.replace(/^@[^/]+\//, ''); // strip scope
               depCount[clean] = (depCount[clean] || 0) + 1;
             });
           } else if (f.type === 'composer') {
@@ -715,9 +615,11 @@ async function loadReposAndSkills() {
 
     await Promise.all(scanPromises);
 
+    // merge: languages + deps
     const allSkills = Object.assign({}, langCount);
+    // add notable deps (filter out noise — only show meaningful ones)
     const notableKeywords = [
-      'express','mongoose','mongodb','jwt','jsonwebtoken','bcrypt','bcryptjs',
+      'express','mongoose','mongodb','mongoose','jwt','jsonwebtoken','bcrypt','bcryptjs',
       'react','vue','angular','next','nuxt','laravel','django','flask','fastapi',
       'axios','socket.io','redis','prisma','sequelize','typeorm','passport',
       'cors','dotenv','nodemon','webpack','vite','tailwindcss','bootstrap',
@@ -734,43 +636,30 @@ async function loadReposAndSkills() {
     const sorted = Object.entries(allSkills).sort(function(a,b){ return b[1]-a[1]; });
     document.getElementById('stat-langs').textContent = sorted.length || '—';
 
-    const total = Object.values(allSkills).reduce(function(a,b){return a+b;},0);
-    renderSkillTiles(sorted, total);
-    renderLangBars(sorted, total);
+    renderSkillCards(sorted, Object.values(allSkills).reduce(function(a,b){return a+b;},0));
+    renderLangBars(sorted, Object.values(allSkills).reduce(function(a,b){return a+b;},0));
     renderProjects(repos.slice(0, 6));
 
   } catch (e) { console.log(e); }
 }
 
-// ── NEW: tile-based skill renderer ──
-function renderSkillTiles(sorted, total) {
+function renderSkillCards(sorted, total) {
   const container = document.getElementById('gh-skills-container');
-  if (!sorted.length) {
-    container.innerHTML = '<div style="font-family:\'JetBrains Mono\',monospace;font-size:0.7rem;color:var(--muted)">no language data yet — push some code!</div>';
-    return;
-  }
-
-  const tiles = sorted.map(function([lang, count]) {
+  if (!sorted.length) { container.innerHTML = '<div style="font-family:\'JetBrains Mono\',monospace;font-size:0.7rem;color:var(--muted)">no language data yet — push some code!</div>'; return; }
+  const cards = sorted.map(function ([lang, count]) {
     const pct = Math.round((count / total) * 100);
-    const color = LANG_COLORS[lang] || '#7c8db0';
-    const repos = count + ' repo' + (count > 1 ? 's' : '');
-    return '<div class="skill-tile" style="--tile-color:' + color + '">'
-      + '<div class="skill-tile-top">'
-      +   '<div class="skill-tile-name"><div class="skill-dot"></div>' + lang + '</div>'
-      +   '<div class="skill-tile-pct">' + pct + '%</div>'
-      + '</div>'
-      + '<div class="skill-track"><div class="skill-fill" data-pct="' + pct + '"></div></div>'
-      + '<div class="skill-tile-foot">' + repos + '</div>'
-      + '</div>';
+    const color = LANG_COLORS[lang] || '#888';
+    return '<div class="skill-lang-card">'
+      + '<div class="lang-color-dot" style="background:' + color + ';box-shadow:0 0 8px ' + color + '44"></div>'
+      + '<div class="lang-info"><div class="lang-name">' + lang + '</div>'
+      + '<div class="lang-bar-wrap"><div class="lang-bar" data-pct="' + pct + '" style="background:' + color + '"></div></div>'
+      + '<div class="lang-meta"><span class="lang-repos">' + count + ' repo' + (count > 1 ? 's' : '') + '</span><span class="lang-pct">' + pct + '%</span></div>'
+      + '</div></div>';
   }).join('');
-
-  container.innerHTML = '<div class="skill-grid">' + tiles + '</div>';
-
-  setTimeout(function() {
-    document.querySelectorAll('.skill-fill').forEach(function(el) {
-      el.style.width = el.getAttribute('data-pct') + '%';
-    });
-  }, 150);
+  container.innerHTML = '<div class="gh-skills-wrap">' + cards + '</div>';
+  setTimeout(function () {
+    document.querySelectorAll('.lang-bar').forEach(function (el) { el.style.width = el.getAttribute('data-pct') + '%'; });
+  }, 200);
 }
 
 function renderLangBars(sorted, total) {
